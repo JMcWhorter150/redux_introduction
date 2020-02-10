@@ -181,15 +181,18 @@
 
 
 // // in redux, it is an error if you try to modify state directly
-
+// To be able to access redux state tools
 import { createStore } from 'redux';
 
+// Set these to allow VSCode to identify spelling mistakes and get helpful console errors
 const ADDMOVIE = "ADDMOVIE";
 const UPDATESONG = "UPDATESONG";
 const ADDBURRITO = "ADDBURRITO";
 const ADDCOFFEE = "ADDCOFFEE";
 const SETSANDWICH = "SETSANDWICH";
 
+
+// Define initial states
 const movieState = {
     howManyMovies: 0
 }
@@ -210,6 +213,7 @@ const sandwichState = {
     forLunch: 'Reuben'
 }
 
+// Describe initial action types and how it will be modifying initial state
 const movieAction = {
     type: "ADDMOVIE",
     amount: 1
@@ -235,6 +239,8 @@ const setSandwich = {
     sandwich: "Pub Sub"
 }
 
+// Define reduce functions that will affect the state using the supplied actions
+// Could use if/else, but switch works better for large sets of if/elses (most examples)
 function countMovies(state=movieState, action) {
     console.log('Updated movies');
     const newState = {...state};
@@ -300,12 +306,16 @@ function setLunch(state=sandwichState, action) {
     return newState;
 }
 
+
+// Sets up the initial "stores" or "banks" or redux states
+// Second argument allows you to see the changes in the redux devtools
 const movieStore = createStore(countMovies, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const songStore = createStore(favoriteSong, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const burritoStore = createStore(countBurritos, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const coffeeStore = createStore(countCoffee, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const sandwichStore = createStore(setLunch, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
+// Subscribe functions let you know when a state/store is updated
 movieStore.subscribe(() => {
     console.log('Updating movie state to:')
     console.table(movieStore.getState());
@@ -331,23 +341,30 @@ sandwichStore.subscribe(() => {
     console.table(sandwichStore.getState());
 });
 
+// Dispatches are the actions sent to modify store/state
+
+// movie actions
 movieStore.dispatch(movieAction);
 movieStore.dispatch(movieAction);
 movieStore.dispatch(movieAction);
 
+// song actions
 songStore.dispatch(updateSong);
 songStore.dispatch({
     type: UPDATESONG,
     newSong: {title: 'Howl', artist: "Beware of Darkness"}
 });
 
+// burrito actions
 burritoStore.dispatch(updateFood);
 burritoStore.dispatch(updateFood);
 burritoStore.dispatch(updateFood);
 
+// coffee actions
 coffeeStore.dispatch(updateCoffee);
 coffeeStore.dispatch(updateCoffee);
 
+// sandwich actions
 sandwichStore.dispatch(setSandwich);
 sandwichStore.dispatch({
     type: SETSANDWICH,
