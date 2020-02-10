@@ -46,58 +46,60 @@ const DECREMENT = "DECREMENT";
 
 const ADD_COUNTER = "ADD_COUNTER";
 const DEL_COUNTER = "DEL_COUNTER";
+
+const defaultState = {
+    amounts: [0]
+}
  // Write action creator functions
  // They format your action objects to avoid typos
 
- function actionIncrement(whichCounter=0, howMuch=1)  {
+ function actionIncrement(id=0)  {
     return {
         type: INCREMENT,
-        amount: howMuch,
-        which: whichCounter
+        id
     }
  }
 
- function actionDecrement(whichCounter=0, howMuch=1) {
+ function actionDecrement(id=0) {
     return {
         type: DECREMENT,
-        amount: howMuch,
-        which: whichCounter
+        id
     }
  }
 
  function actionAddCounter(start=0) {
      return {
          type: ADD_COUNTER,
-         amount: start
+         start
      }
  }
 
- function actionDelCounter(whichCounter) {
+ function actionDelCounter(id) {
     return {
         type: DEL_COUNTER,
-        whichCounter
+        id
     }
 }
 
 // The teller - a reducer function
 // reducers are always named for the state they manage
 // they always receive the current state and the action they're processing.
-function counter(state={amount: []}, action) {
+function counter(state=defaultState, action) {
     console.log('Somebody called counter');
     const newState = {...state};
 
     switch(action.type) {
         case INCREMENT:
-            newState.amount[action.which] = state.amount[action.which] + action.amount;
+            newState.amounts[action.id] = state.amounts[action.id] + 1;
             break;
         case DECREMENT:
-            newState.amount[action.which] = state.amount[action.which] - action.amount;
+            newState.amounts[action.id] = state.amounts[action.id] - 1;
             break;
         case ADD_COUNTER:
-            newState.amount.push(action.amount);
+            newState.amounts.push(action.start);
             break;
         case DEL_COUNTER:
-            newState.amount.splice(action.whichCounter, 1);
+            newState.amounts.splice(action.id, 1);
         default:
             break;
     }
@@ -117,7 +119,7 @@ function counter(state={amount: []}, action) {
 
 // You give it a reducer, it gives you a 'store'
 // The store is an object that manages your state using your reducer
-const store = createStore(counter);
+const store = createStore(counter, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 // Push notifications - subscribe to changes in the store
 store.subscribe(() => {
@@ -131,12 +133,23 @@ store.subscribe(() => {
 //     amount: 99
 // })
 
-store.dispatch(actionAddCounter());
-store.dispatch(actionAddCounter());
-store.dispatch(actionIncrement(1));
-store.dispatch(actionIncrement(1));
+// store.dispatch(actionAddCounter());
+// store.dispatch(actionAddCounter());
+// store.dispatch(actionIncrement(1));
+// store.dispatch(actionIncrement(1));
+// store.dispatch(actionIncrement());
+// store.dispatch(actionDelCounter(1));
+
+
 store.dispatch(actionIncrement());
-store.dispatch(actionDelCounter(1));
+store.dispatch(actionIncrement());
+store.dispatch(actionAddCounter());
+store.dispatch(actionAddCounter());
+store.dispatch(actionAddCounter());
+store.dispatch(actionDecrement());
+store.dispatch(actionIncrement(2));
+store.dispatch(actionDecrement(3));
+
 
 // store.dispatch(actionIncrement(44));
 // store.dispatch(actionDecrement(4));
