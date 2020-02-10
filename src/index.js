@@ -39,20 +39,78 @@ import {
     createStore
  } from 'redux';
 
+ // Create your action types as constants so that you get error messages for types.
+// HOW TO ADD AND REMOVE COUNTERS (amounts)
+const INCREMENT = "INCREMENT";
+const DECREMENT = "DECREMENT";
+
+const ADD_COUNTER = "ADD_COUNTER";
+const DEL_COUNTER = "DEL_COUNTER";
+ // Write action creator functions
+ // They format your action objects to avoid typos
+
+ function actionIncrement(whichCounter=0, howMuch=1)  {
+    return {
+        type: INCREMENT,
+        amount: howMuch,
+        which: whichCounter
+    }
+ }
+
+ function actionDecrement(whichCounter=0, howMuch=1) {
+    return {
+        type: DECREMENT,
+        amount: howMuch,
+        which: whichCounter
+    }
+ }
+
+ function actionAddCounter(start=0) {
+     return {
+         type: ADD_COUNTER,
+         amount: start
+     }
+ }
+
+ function actionDelCounter(whichCounter) {
+    return {
+        type: DEL_COUNTER,
+        whichCounter
+    }
+}
+
 // The teller - a reducer function
 // reducers are always named for the state they manage
 // they always receive the current state and the action they're processing.
-function counter(state={ amount: 100}, action) {
+function counter(state={amount: []}, action) {
     console.log('Somebody called counter');
     const newState = {...state};
-    if (action.type === 'INCREMENT') {
-        newState.amount = state.amount + 1;
-    } else if (action.type === 'DECREMENT') {
-        newState.amount = state.amount - 1;
-    } else{
-        // ... no need to do anything
-        // we already made a copy of state to return.
+
+    switch(action.type) {
+        case INCREMENT:
+            newState.amount[action.which] = state.amount[action.which] + action.amount;
+            break;
+        case DECREMENT:
+            newState.amount[action.which] = state.amount[action.which] - action.amount;
+            break;
+        case ADD_COUNTER:
+            newState.amount.push(action.amount);
+            break;
+        case DEL_COUNTER:
+            newState.amount.splice(action.whichCounter, 1);
+        default:
+            break;
     }
+
+
+    // if (action.type === 'INCREMENT') {
+    //     newState.amount = state.amount + action.amount;
+    // } else if (action.type === 'DECREMENT') {
+    //     newState.amount = state.amount - action.amount;
+    // } else{
+    //     // ... no need to do anything
+    //     // we already made a copy of state to return.
+    // }
     // they *must* return a new version of the state
     return newState;
 }
@@ -68,6 +126,21 @@ store.subscribe(() => {
 })
 
 // Let's give the store some actions to process
+// store.dispatch({
+//     type: 'DECREMENT',
+//     amount: 99
+// })
+
+store.dispatch(actionAddCounter());
+store.dispatch(actionAddCounter());
+store.dispatch(actionIncrement(1));
+store.dispatch(actionIncrement(1));
+store.dispatch(actionIncrement());
+store.dispatch(actionDelCounter(1));
+
+// store.dispatch(actionIncrement(44));
+// store.dispatch(actionDecrement(4));
+// store.dispatch(actionIncrement());
 let increment = (times) => {
     let i = 0;
     while (i < times) {
