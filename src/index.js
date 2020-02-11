@@ -317,6 +317,8 @@ function setLunch(state=sandwichState, action) {
 
 // Sets up the initial "stores" or "banks" or redux states
 // Second argument allows you to see the changes in the redux devtools
+
+// createStore takes in three arguments: Reducer, state, debuggers
 const movieStore = createStore(countMovies, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const songStore = createStore(favoriteSong, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 const burritoStore = createStore(countBurritos, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
