@@ -218,6 +218,14 @@ const movieAction = {
     type: "ADDMOVIE",
     amount: 1
 }
+// if you have multiple pieces of information to add to an action include a payload as shown below
+// const updateSong = {
+    // type: "UPDATESONG",
+    // payload: {
+        // title: "Brother",
+        // artist: "Murder by Death"
+    // }
+// }
 
 const updateSong = {
     type: "UPDATESONG",
